@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scrimantem</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ebfafd;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+#logContent {
+    color: inherit; 
+}
+
+ #logContent p {
+    color: black;  
+}
+
+        
+        #what {
+    font-size: 10px;
+    color: #777;
+}
+
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            gap: 20px;
+        }
+        body.dark-mode {
+            background-color: #2e2e2e;
+            color: #e4d0a4;
+        }
+        h1 {
+            font-size: 36px;
+            margin-top: 10px;
+        }
+        #timer, #score {
+            font-size: 18px;
+        }
+        #question {
+            font-size: 22px;
+            font-weight: 500;
+            max-width: 90%;
+            white-space: normal;
+            word-break: break-word;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid black;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            
+        }
+
+        #submitAnswer{
+            background-color: lightblue;
+        }
+
+        #buzzButton {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        #buttonContainer {
+    position: absolute;
+    top: 60px; 
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Ensures consistent spacing between buttons */
+    padding: 10px; /* Optional: Adds padding inside the container */
+    background-color: transparent; /* Ensures no background color */
+    border: none; /* Removes any border around the container */
+}
+
+#reportQuestionButton, #reportWrongCategoryButton {
+    border: 2px solid black; /* Add black border to individual buttons */
+    padding: 12px 20px; /* Match padding with other buttons */
+    font-size: 16px; /* Match font size with other buttons */
+    cursor: pointer; /* Ensure pointer cursor */
+    border-radius: 8px; /* Match border radius with other buttons */
+    background-color: lightblue; /* Match background color with other buttons */
+    margin: 0; /* Remove any default margin */
+}
+
+#viewReportsButton {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid black;
+            cursor: pointer;
+            background-color: lightblue;
+            border-radius: 8px;
+            
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .reported-question {
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .reported-question p {
+            margin: 5px 0;
+        }
+
+        .reported-question h3 {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        .backButton {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid black;
+            background-color: lightcoral;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+
+        #answerInput {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            display: none;
+        }
+        .modal, #categorySelection {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        /* Add this to your existing CSS */
+#categorySelectionModal {
+    display: none; /* Hidden by default */
+}
+
+#newCategorySelect {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    width: 100%;
+    max-width: 300px;
+}
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 50%;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .category-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 60%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        #clearLogButton {
+            
+                        border: 2px solid black;
+                        
+
+        }
+        #modeToggleButton {
+            border: 2px solid black;
+            padding: 8px 16px;
+            background-color: #6200ea;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            border: 2px solid black;
+            top: 20px;
+            right: 20px;
+
+
+        }
+        #viewLogButton {
+    border: 2px solid black; /* Add black border */
+    padding: 12px 20px; /* Match padding with other buttons */
+    font-size: 16px; /* Match font size with other buttons */
+    cursor: pointer; /* Ensure pointer cursor */
+    border-radius: 8px; /* Match border radius with other buttons */
+    margin: 0; /* Remove any default margin */
+}
+
+    </style>
+</head>
+<body>
+
+    <button id="modeToggleButton">Toggle Mode</button>
+    <div id="buttonContainer">
+    <button id="viewLogButton" onclick="viewLog()">View Log</button>
+    <button id="reportQuestionButton">Report Question</button>
+    <button id="viewReportsButton" onclick="window.location.href='/reported-questions'">View Reported Questions</button>
+    <button id="clearLogButton">Clear Log</button>
+    <!-- Add this button to the button container -->
+<button id="reportWrongCategoryButton">Report Wrong Category</button>
+
+<!-- Add this modal for selecting the new category -->
+<div class="modal" id="categorySelectionModal">
+    <div class="modal-content">
+        <h2>Select New Category</h2>
+        <p>Choose the correct category for this question.</p>
+        <select id="newCategorySelect">
+            <option value="Myth">Myth</option>
+            <option value="Language">Language</option>
+            <option value="Literature">Literature</option>
+            <option value="History">History</option>
+            <option value="Uncategorized">Uncategorized</option>
+            <option value="faulty">Faulty</option>
+        </select>
+        <br><br>
+        <button onclick="submitCategoryChange()">Submit</button>
+        <button onclick="closeCategoryModal()">Cancel</button>
+    </div>
+</div>
+
+</div>
+
+    <div class="container" id="gameContainer" style="display:none;">
+        <h1>scrimantem</h1>
+
+        <p>Advanced Certamen Questions</p>
+                <p id= "what">    see <a href="https://docs.google.com/document/d/1-WN_S2N4p3Hbv3-IzPjr9G20nRHazstUhIyjktkLAjU/edit?tab=t.0" target="_blank">this doc</a> for documentation!
+</p>
+        <div id="timer">Time Left: <span id="timeLeft">30</span> seconds</div>
+        <div id="question"></div>
+        <button id="buzzButton">Buzz!</button>
+        <div id="correctAnswerDisplay"></div>
+        <input type="text" id="answerInput" placeholder="Your answer..." />
+        <button id="submitAnswer">Submit Answer</button>
+    <!--    <div id="score">Score: 0</div> 
+        <button id="viewLogButton" onclick="viewLog()">View Log</button>
+        <button id="clearLogButton">Clear Log</button> -->
+    <span id="speedValue">300ms</span>
+    <input type="range" id="speedSlider" min="100" max="1000" value="300" step="50">
+
+    </div>
+
+<!-- Category Selection Modal -->
+<!-- Category Selection Modal -->
+<div id="categorySelection" class="modal" style="display:flex;">
+    <div class="category-content">
+        <h2>Select Categories</h2>
+        <p>Choose categories to be included.</p>
+        <label><input type="checkbox" id="myth" checked> Myth</label><br>
+        <label><input type="checkbox" id="language" checked> Language</label><br>
+        <label><input type="checkbox" id="literature" checked> Literature</label><br>
+        <label><input type="checkbox" id="history" checked> History</label><br>
+        <label><input type="checkbox" id="uncategorized" checked> Uncategorized</label><br>
+        <label><input type="checkbox" id="faulty"> Faulty</label><br><br> <!-- New "faulty" category -->
+        <button onclick="startGame()">Start</button>
+    </div>
+</div>
+
+<!-- Modal for log -->
+<div class="modal" id="logModal">
+    <div class="modal-content" style="max-height: 70vh; overflow-y: auto;">
+        <h2>Quiz Log</h2>
+        <div id="logContent"></div>
+        <button onclick="closeLog()">Close</button>
+    </div>
+</div>
+<script>
+    let questions = [];
+    let selectedCategories = [];
+    let currentQuestionIndex = -1;
+    let score = 0;
+    let intervalId, timerId;
+    let currentWordIndex = 0;
+    let timeLeft = 30;
+    let buzzedWord = "";
+    let buzzedTimeLeft = 30;
+
+    // Add this variable to track the current question being reported
+let currentQuestionToReport = null;
+
+// Add this event listener for the "Report Wrong Category" button
+document.getElementById("reportWrongCategoryButton").onclick = function () {
+    currentQuestionToReport = questions[currentQuestionIndex].question; // Track the current question
+    document.getElementById("categorySelectionModal").style.display = "flex"; // Show the modal
+};
+
+// Function to submit the category change
+function submitCategoryChange() {
+    const newCategory = document.getElementById("newCategorySelect").value;
+
+    if (!newCategory || !currentQuestionToReport) {
+        alert("Please select a category.");
+        return;
+    }
+
+    // Send the updated category to the server
+    fetch("http://localhost:3000/update-category", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            question: currentQuestionToReport,
+            newCategory: newCategory,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            alert(data.message);
+            closeCategoryModal(); // Close the modal after successful submission
+        })
+        .catch((error) => {
+            console.error("Error updating category:", error);
+            alert("Question updated.");
+            closeCategoryModal(); // Close the modal after successful submission
+        });
+}
+
+// Function to close the category selection modal
+function closeCategoryModal() {
+    document.getElementById("categorySelectionModal").style.display = "none";
+    currentQuestionToReport = null; // Reset the tracked question
+}
+
+    async function loadQuestions() {
+    try {
+        const response = await fetch('questions.json');
+        const allQuestions = await response.json();
+
+        questions = allQuestions.filter(q => {
+            // Exclude questions not in the selected categories
+            if (selectedCategories.length === 0) return true; // If no categories are selected, include all
+            return selectedCategories.includes(q.category); // Include only questions in selected categories
+        });
+
+        if (questions.length === 0) {
+            alert("No questions available for the selected categories.");
+            document.getElementById("categorySelection").style.display = "flex";
+            document.getElementById("gameContainer").style.display = "none";
+            return;
+        }
+        startQuestion();
+    } catch (error) {
+        console.error("Error loading questions:", error);
+        document.getElementById("question").innerText = "There was an issue loading the questions.";
+    }
+}
+
+// slider for interval of speed
+document.getElementById("speedSlider").addEventListener("input", function() {
+    document.getElementById("speedValue").innerText = this.value + "ms";
+});
+
+
+document.getElementById("reportQuestionButton").onclick = function() {
+    const currentQuestion = questions[currentQuestionIndex].question;
+    const reason = prompt("Why are you reporting this question?");
+
+    if (!reason) return;
+
+    fetch("http://localhost:3000/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: currentQuestion, reason }),
+    })
+    .then(response => response.json())
+    .then(data => alert(data.message))
+    .catch(error => console.error("Error reporting question:", error));
+};
+
+
+
+
+function startGame() {
+    selectedCategories = [];
+    document.getElementById("myth").checked && selectedCategories.push("Myth");
+    document.getElementById("language").checked && selectedCategories.push("Language");
+    document.getElementById("literature").checked && selectedCategories.push("Literature");
+    document.getElementById("history").checked && selectedCategories.push("History");
+    document.getElementById("uncategorized").checked && selectedCategories.push("Uncategorized");
+    document.getElementById("faulty").checked && selectedCategories.push("faulty"); // Include "faulty" category
+
+    if (selectedCategories.length === 0) {
+        alert("Please select at least one category.");
+        return;
+    }
+
+    document.getElementById("categorySelection").style.display = "none";
+    document.getElementById("gameContainer").style.display = "flex";
+    loadQuestions();
+}
+    
+    function startQuestion() {
+        resetTimer();
+        let newQuestionIndex;
+        do {
+            newQuestionIndex = Math.floor(Math.random() * questions.length);
+        } while (newQuestionIndex === currentQuestionIndex);
+
+        currentQuestionIndex = newQuestionIndex;
+        currentWordIndex = 0;
+        document.getElementById("question").innerText = "";  
+        document.getElementById("answerInput");
+        document.getElementById("submitAnswer");
+        document.getElementById("buzzButton").disabled = false;
+        buzzedWord = "";
+        buzzedTimeLeft = 30;
+        clearInterval(intervalId);
+    intervalId = setInterval(revealNextWord, document.getElementById("speedSlider").value); // changed from 300 to slider
+        timerId = setInterval(countDown, 1000);
+    }
+
+    function revealNextWord() {
+        const words = questions[currentQuestionIndex].question.split(' ');
+        if (currentWordIndex < words.length) {
+            document.getElementById("question").innerText += ' ' + words[currentWordIndex];
+            currentWordIndex++;
+        } else {
+            clearInterval(intervalId);
+        }
+    }
+
+    //  function for both button click and space key 
+function buzz() {
+    clearInterval(intervalId);
+    clearInterval(timerId);
+    buzzedWord = questions[currentQuestionIndex].question.split(' ')[currentWordIndex - 1];
+    buzzedTimeLeft = timeLeft;
+    document.getElementById("buzzButton").disabled = true;
+    document.getElementById("answerInput").style.display = 'inline';
+    document.getElementById("submitAnswer").style.display = 'inline';
+}
+
+
+// button click event
+document.getElementById("buzzButton").onclick = function() {
+    buzz();  
+};
+
+function clearLog() {
+    localStorage.removeItem("quizLog"); // remove from storage
+    document.getElementById("logContent").innerHTML = "<p>No attempts logged yet.</p>"; // Clears the displayed log
+}
+
+// event listener to the button
+document.getElementById("clearLogButton").addEventListener("click", clearLog);
+
+
+
+
+    document.getElementById("submitAnswer").onclick = function() {
+        checkAnswer();
+    };
+
+function checkAnswer() {
+    const userAnswer = document.getElementById("answerInput").value.trim().toLowerCase();
+    const correctAnswer = questions[currentQuestionIndex].answer;
+    const correctAnswerDisplay = document.getElementById("correctAnswerDisplay");
+
+    correctAnswerDisplay.innerText = "Answer: " + correctAnswer;
+    correctAnswerDisplay.style.color = "black"; // nvm
+    
+        if (document.body.classList.contains("dark-mode")) {
+        correctAnswerDisplay.style.color = "yellow";
+    } else {
+        correctAnswerDisplay.style.color = "black";
+    }
+
+
+    logAttempt(userAnswer === correctAnswer.toLowerCase(), userAnswer);
+
+    document.getElementById("submitAnswer").innerText = "Next Question";
+    document.getElementById("submitAnswer").onclick = startNextQuestion;
+}
+
+function startNextQuestion() {
+    document.getElementById("correctAnswerDisplay").innerText = ""; 
+    document.getElementById("answerInput").value = '';
+    
+    document.getElementById("submitAnswer").innerText = "Submit Answer";
+    document.getElementById("submitAnswer").onclick = checkAnswer;
+
+    startQuestion();
+}
+
+
+    function logAttempt(isCorrect, userAnswer) {
+        const logEntry = {
+            question: questions[currentQuestionIndex].question,
+            correctAnswer: questions[currentQuestionIndex].answer,
+            userAnswer,
+            result: isCorrect ? "Correct" : "Incorrect",
+            buzzedWord,
+            buzzedTimeLeft,
+            timestamp: new Date().toLocaleString()
+        };
+
+        const log = JSON.parse(localStorage.getItem("quizLog") || "[]");
+        log.push(logEntry);
+        localStorage.setItem("quizLog", JSON.stringify(log));
+    }
+
+    function viewLog() {
+        const log = JSON.parse(localStorage.getItem("quizLog") || "[]");
+        const logContent = document.getElementById("logContent");
+        logContent.innerHTML = log.length
+            ? log.map(entry => `<p><b>Question:</b> ${entry.question}<br><b>Your Answer:</b> ${entry.userAnswer}<br><b>Result:</b> ${entry.result}<br><b> Answer:</b> ${entry.correctAnswer}<br><b>Buzzed Word:</b> ${entry.buzzedWord}<br><b>Time Left on Buzz:</b> ${entry.buzzedTimeLeft} seconds</p><hr>`).join('')
+            : "<p>No attempts logged yet.</p>";
+
+        document.getElementById("logModal").style.display = "flex";
+    }
+
+    function closeLog() {
+        document.getElementById("logModal").style.display = "none";
+    }
+
+    function resetTimer() {
+        clearInterval(timerId);
+        timeLeft = 30;
+        document.getElementById("timeLeft").innerText = timeLeft;
+    }
+
+    function countDown() {
+        if (timeLeft > 0) {
+            timeLeft--;
+            document.getElementById("timeLeft").innerText = timeLeft;
+        } else {
+            clearInterval(timerId);
+            checkAnswer();
+        }
+    }
+
+    document.getElementById("modeToggleButton").onclick = function() {
+        document.body.classList.toggle("dark-mode");
+    };
+
+// listener for spacebar 
+document.addEventListener("keydown", function(event) {
+    if (event.key === " " && !document.getElementById("buzzButton").disabled) {
+        buzz();
+    }
+});
+</script>
+<!-- <footer style="position: fixed; top: 0; left: 0; margin: 10px; text-align: left; font-size: 12px; color: #777;">
+    sameelaughs !!! see <a href="https://docs.google.com/document/d/1-WN_S2N4p3Hbv3-IzPjr9G20nRHazstUhIyjktkLAjU/edit?tab=t.0" target="_blank">this doc</a> for documentation!
+</footer> -->
+
+
+
+</body>
+</html>
