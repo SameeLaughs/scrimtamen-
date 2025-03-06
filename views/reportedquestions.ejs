@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reported Questions</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
+        .reported-question {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px auto; /* Center each box horizontally */
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 200px; /* Set a max height for the container */
+            overflow-y: auto; /* Enable vertical scrolling if content overflows */
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .backButton {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid black;
+            background-color: lightcoral;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Reported Questions</h2>
+
+    <div id="reportsContainer">
+        <% if (reports.length > 0) { %>
+            <% reports.forEach(report => { %>
+                <div class="reported-question">
+                    <h3>Question: <%= report.question %></h3>
+                    <p><strong>Reason:</strong> <%= report.reason %></p>
+                    <p><strong>Reported At:</strong> <%= report.timestamp %></p>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>No questions have been reported yet.</p>
+        <% } %>
+    </div>
+
+    <button class="backButton" onclick="window.location.href='/'">Back to Home</button>
+
+</body>
+</html>
