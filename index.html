@@ -228,6 +228,36 @@
     margin: 0; /* Remove any default margin */
 }
 
+        @media (max-width: 600px) {
+    body {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        padding: 20px;
+    }
+
+    #buttonContainer {
+        position: static;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    #modeToggleButton {
+        position: static;
+        margin-bottom: 20px;
+        align-self: center;
+    }
+
+    .modal-content, .category-content {
+        width: 90%;
+    }
+
+    #newCategorySelect {
+        width: 100%;
+    }
+        }
+
     </style>
 </head>
 <body>
